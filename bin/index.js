@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 const config = require('config');
 const execSync = require("child_process").execSync;
-const yaml = require('js-yaml');
-const fs   = require('fs');
-const path = require('path');
 
 require('yargs')
   .scriptName("jumpbox-cli")
@@ -18,31 +15,11 @@ require('yargs')
       describe: 'k8s namespace'
     })
   }, function (argv) {
-
-    var app = getApp(argv.namespace);
-
-    var properties = [];
-
-    for(var i in app.properties) {
-      if(app.properties[i].type == "configMap") {
-        properties.push({
-          name : app.properties[i].key,
-          value : getConfigMapValue(argv.context, argv.namespace, app.properties[i].configMap, app.properties[i].configMapKey)
-        });
-      }
-
-      if(app.properties[i].type == "secret") {
-        properties.push({
-          name : app.properties[i].key,
-          value : getSecretValue(argv.context, argv.namespace, app.properties[i].secret, app.properties[i].secretKey)
-        });
-      }
-    }
-
-    console.log(generateYaml(app.jumpboxType, properties));
+    console.log(generateYaml(argv.context, argv.namespace));
   })
   .help()
   .argv
+
 
 function getApp(namespace){
   var apps = config.get('apps');
@@ -62,11 +39,39 @@ function getSecretValue(context, namespace, secret, key){
   return execSync("kubectl --context=" + context + " --namespace=" + namespace + " get secret " + secret + " -o=go-template='{{index .data \"" + key + "\"}}' | base64 -d").toString();
 }
 
-function generateYaml(type, parameters){
-  var doc = yaml.load(fs.readFileSync(path.join(__dirname, '../resources/jumpbox.yaml'), 'utf8'));
-  doc.metadata.name = type + "-jumpbox";
-  doc.spec.template.spec.containers[0].name = type + "-jumpbox";
-  doc.spec.template.spec.containers[0].env = parameters;
+function generateYaml(context, namespace){
 
-  return yaml.dump(doc);
+  var app = getApp(namespace);
+
+  var template = "apiVersion: batch/v1\n";
+  template += "kind: Job\n";
+  template += "metadata:\n";
+  template += "  name: " + app.jumpboxType + "-jumpbox\n";
+  template += "spec:\n";
+  template += "  template:\n";
+  template += "    spec:\n";
+  template += "      containers:\n";
+  template += "      - name: " + app.jumpboxType + "-jumpbox\n";
+  template += "        image: mirror.registry:5000/bragi/test/sas-jumpbox:vtest\n";
+  template += "        env:\n";
+
+  for(var i in app.properties) {
+    template += "        - name: " + app.properties[i].key + "\n";
+    if(app.properties[i].type == "configMap") {
+      template += "          value: " + getConfigMapValue(context, namespace, app.properties[i].configMap, app.properties[i].configMapKey) + "\n";
+    }
+    if(app.properties[i].type == "secret") {
+      template += "          value: " + getSecretValue(context, namespace, app.properties[i].secret, app.properties[i].secretKey) + "\n";
+    }
+  }
+
+  template += "        resources:\n";
+  template += "          limits:\n";
+  template += "            memory: \"0\"\n";
+  template += "            cpu: \"0\"\n";
+  template += "      restartPolicy: Never\n";
+  template += "  backoffLimit: 4\n";
+  template += "  activeDeadlineSeconds: 7200\n";
+
+  return template;
 }

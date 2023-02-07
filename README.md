@@ -8,6 +8,7 @@ Clone the repo to your machine
 
 ```
 cd jumpbox-cli
+npm install
 npm install -g .
 ```
 
