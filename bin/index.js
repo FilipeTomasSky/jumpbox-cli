@@ -48,7 +48,7 @@ function getApp(namespace){
   var apps = config.get('apps');
 
   for(var i in apps) {
-    if(namespace.startsWith(apps[i].shortName + "-")){
+    if(namespace.startsWith(apps[i].name + "-")){
       return apps[i];
     }
   }

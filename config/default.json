@@ -1,8 +1,7 @@
 {
     "apps" : [
         {
-            "name": "Voucher Manager",
-            "shortName": "vm",
+            "name": "vm",
             "jumpboxType": "mysql",
             "properties": [
                 {
@@ -32,8 +31,7 @@
             ]
         },
         {
-            "name": "Communications Composer",
-            "shortName": "comms",
+            "name": "comms",
             "jumpboxType": "cql",
             "properties": [
                 {
@@ -52,6 +50,66 @@
                     "key": "CASSANDRA_KEYSPACE",
                     "type": "configMap",
                     "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_KEYSPACE" 
+                },
+                {
+                    "key": "CASSANDRA_PASSWORD",
+                    "type": "secret",
+                    "secret": "cassandra-communications-composer",
+                    "secretKey": "password" 
+                }
+            ]
+        },
+        {
+            "name": "eg",
+            "jumpboxType": "cql",
+            "properties": [
+                {
+                    "key": "CASSANDRA_HOSTS",
+                    "type": "configMap",
+                    "configMap": "esp-gateway-service-config",
+                    "configMapKey": "CASSANDRA_HOSTS" 
+                },
+                {
+                    "key": "CASSANDRA_USERNAME",
+                    "type": "configMap",
+                    "configMap": "esp-gateway-service-config",
+                    "configMapKey": "CASSANDRA_USERNAME" 
+                },
+                {
+                    "key": "CASSANDRA_KEYSPACE",
+                    "type": "configMap",
+                    "configMap": "esp-gateway-service-config",
+                    "configMapKey": "CASSANDRA_KEYSPACE" 
+                },
+                {
+                    "key": "CASSANDRA_PASSWORD",
+                    "type": "secret",
+                    "secret": "cassandra-esp-gateway",
+                    "secretKey": "password" 
+                }
+            ]
+        },
+        {
+            "name": "chm",
+            "jumpboxType": "cql",
+            "properties": [
+                {
+                    "key": "CASSANDRA_HOSTS",
+                    "type": "configMap",
+                    "configMap": "communications-history-manager-service-config",
+                    "configMapKey": "CASSANDRA_HOSTS" 
+                },
+                {
+                    "key": "CASSANDRA_USERNAME",
+                    "type": "configMap",
+                    "configMap": "communications-history-manager-service-config",
+                    "configMapKey": "CASSANDRA_USERNAME" 
+                },
+                {
+                    "key": "CASSANDRA_KEYSPACE",
+                    "type": "configMap",
+                    "configMap": "communications-history-manager-service-config",
                     "configMapKey": "CASSANDRA_KEYSPACE" 
                 },
                 {
