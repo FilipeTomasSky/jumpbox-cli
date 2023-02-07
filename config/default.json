@@ -1,0 +1,66 @@
+{
+    "apps" : [
+        {
+            "name": "Voucher Manager",
+            "shortName": "vm",
+            "jumpboxType": "mysql",
+            "properties": [
+                {
+                    "key": "MYSQL_HOST",
+                    "type": "configMap",
+                    "configMap": "voucher-manager-service-config",
+                    "configMapKey": "VOUCHERS_DB_HOST" 
+                },
+                {
+                    "key": "MYSQL_USERNAME",
+                    "type": "configMap",
+                    "configMap": "voucher-manager-service-config",
+                    "configMapKey": "VOUCHERS_DB_USER" 
+                },
+                {
+                    "key": "MYSQL_DATABASE",
+                    "type": "configMap",
+                    "configMap": "voucher-manager-service-config",
+                    "configMapKey": "VOUCHERS_DB_NAME" 
+                },
+                {
+                    "key": "MYSQL_PASSWORD",
+                    "type": "secret",
+                    "secret": "vm-secrets",
+                    "secretKey": "db" 
+                }
+            ]
+        },
+        {
+            "name": "Communications Composer",
+            "shortName": "comms",
+            "jumpboxType": "cql",
+            "properties": [
+                {
+                    "key": "CASSANDRA_HOSTS",
+                    "type": "configMap",
+                    "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_HOSTS" 
+                },
+                {
+                    "key": "CASSANDRA_USERNAME",
+                    "type": "configMap",
+                    "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_USERNAME" 
+                },
+                {
+                    "key": "CASSANDRA_KEYSPACE",
+                    "type": "configMap",
+                    "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_KEYSPACE" 
+                },
+                {
+                    "key": "CASSANDRA_PASSWORD",
+                    "type": "secret",
+                    "secret": "cassandra-communications-composer",
+                    "secretKey": "password" 
+                }
+            ]
+        }
+    ]
+}
