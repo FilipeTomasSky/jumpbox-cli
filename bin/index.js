@@ -15,7 +15,11 @@ require('yargs')
       describe: 'k8s namespace'
     })
   }, function (argv) {
-    console.log(generateYaml(argv.context, argv.namespace));
+
+    var context = getContext(argv.context);
+    var namespace = getNamespace(argv.namespace);
+
+    console.log(generateYaml(context, namespace));
   })
   .help()
   .argv
@@ -29,6 +33,20 @@ function getApp(namespace){
       return apps[i];
     }
   }
+}
+
+function getContext(context) {
+  if(context) {
+    return context;
+  }
+  return execSync("kubectx --current").toString().trim();
+}
+
+function getNamespace(namespace) {
+  if(namespace) {
+    return namespace;
+  }
+  return execSync("kubens --current").toString().trim();
 }
 
 function getConfigMapValue(context, namespace, configmap, key){

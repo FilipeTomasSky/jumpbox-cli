@@ -153,7 +153,7 @@ class Apps {
                 {
                     "key": "CASSANDRA_PASSWORD",
                     "type": "secret",
-                    "secret": "cassandra-communications-composer",
+                    "secret": "cassandra-communications-history-manager",
                     "secretKey": "password" 
                 }
             ]
