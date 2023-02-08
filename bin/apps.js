@@ -1,6 +1,10 @@
-{
-    "apps" : [
-        {
+class Apps {
+
+    get configured() {
+
+        var apps = [];
+
+        apps.push({
             "name": "vm",
             "jumpboxType": "mysql",
             "properties": [
@@ -29,8 +33,9 @@
                     "secretKey": "db" 
                 }
             ]
-        },
-        {
+        })
+
+        apps.push({
             "name": "comms",
             "jumpboxType": "cql",
             "properties": [
@@ -59,8 +64,40 @@
                     "secretKey": "password" 
                 }
             ]
-        },
-        {
+        })
+
+        apps.push({
+            "name": "comms",
+            "jumpboxType": "cql",
+            "properties": [
+                {
+                    "key": "CASSANDRA_HOSTS",
+                    "type": "configMap",
+                    "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_HOSTS" 
+                },
+                {
+                    "key": "CASSANDRA_USERNAME",
+                    "type": "configMap",
+                    "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_USERNAME" 
+                },
+                {
+                    "key": "CASSANDRA_KEYSPACE",
+                    "type": "configMap",
+                    "configMap": "communications-composer-service-config",
+                    "configMapKey": "CASSANDRA_KEYSPACE" 
+                },
+                {
+                    "key": "CASSANDRA_PASSWORD",
+                    "type": "secret",
+                    "secret": "cassandra-communications-composer",
+                    "secretKey": "password" 
+                }
+            ]
+        })
+
+        apps.push({
             "name": "eg",
             "jumpboxType": "cql",
             "properties": [
@@ -89,8 +126,9 @@
                     "secretKey": "password" 
                 }
             ]
-        },
-        {
+        })
+
+        apps.push({
             "name": "chm",
             "jumpboxType": "cql",
             "properties": [
@@ -119,6 +157,12 @@
                     "secretKey": "password" 
                 }
             ]
-        }
-    ]
+        })
+
+
+        return apps;
+    }
+
 }
+
+module.exports = Apps

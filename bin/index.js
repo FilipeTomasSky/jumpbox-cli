@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const config = require('config');
+const Apps = require('./apps.js');
 const execSync = require("child_process").execSync;
 
 require('yargs')
@@ -22,7 +22,7 @@ require('yargs')
 
 
 function getApp(namespace){
-  var apps = config.get('apps');
+  var apps = new Apps().configured;
 
   for(var i in apps) {
     if(namespace.startsWith(apps[i].name + "-")){
