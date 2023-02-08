@@ -25,7 +25,7 @@ kubectl apply -f ./new_jumpbox.yml
 
 Configuration
 -------------
-To support more components alter the config/default.json file and add more apps
+To support more components alter the apps.js file and add more apps
 ```
         {
             "name": "<service-short-name>",
